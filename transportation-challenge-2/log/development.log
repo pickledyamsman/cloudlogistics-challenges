@@ -1,0 +1,312 @@
+  [1m[35m (7.2ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (4.5ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_try_advisory_lock(3967959768635240700)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateRoute (20180109185413)
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (4.2ms)[0m  [1m[35mCREATE TABLE "routes" ("id" bigserial primary key, "carrier" character varying, "destination" character varying, "origin" character varying)[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20180109185413"]]
+  [1m[35m (0.9ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateStop (20180109185629)
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (3.8ms)[0m  [1m[35mCREATE TABLE "stops" ("id" bigserial primary key, "address" character varying, "route_id" integer)[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20180109185629"]]
+  [1m[35m (0.9ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2018-01-09 18:57:30.142534"], ["updated_at", "2018-01-09 18:57:30.142534"]]
+  [1m[35m (0.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_advisory_unlock(3967959768635240700)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" DEFAULT VALUES RETURNING "id"[0m
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT  "stops".* FROM "stops" LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mRoute Load (0.2ms)[0m  [1m[34mSELECT  "routes".* FROM "routes" WHERE "routes"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 1]]
+  [1m[35m (2.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT  "stops".* FROM "stops" WHERE "stops"."route_id" = $1 LIMIT $2[0m  [["route_id", 1], ["LIMIT", 11]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[31mDELETE FROM "routes" WHERE "routes"."id" = $1[0m  [["id", 1]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT  "stops".* FROM "stops" LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[36mRoute Load (0.2ms)[0m  [1m[34mSELECT  "routes".* FROM "routes" LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT  "stops".* FROM "stops" ORDER BY "stops"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[31mDELETE FROM "stops" WHERE "stops"."id" = $1[0m  [["id", 1]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT  "stops".* FROM "stops" LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[36mRoute Load (0.2ms)[0m  [1m[34mSELECT  "routes".* FROM "routes" LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "d"], ["origin", "a"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "b"], ["route_id", 2]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 2]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "d"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 3]]
+  [1m[35m (0.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mRoute Load (0.2ms)[0m  [1m[34mSELECT  "routes".* FROM "routes" LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[36mRoute Load (0.2ms)[0m  [1m[34mSELECT  "routes".* FROM "routes" ORDER BY "routes"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT  "stops".* FROM "stops" WHERE "stops"."route_id" = $1 LIMIT $2[0m  [["route_id", 2], ["LIMIT", 11]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "d"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 4]]
+  [1m[35m (8.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "d"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 5]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 5]]
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT  "stops".* FROM "stops" LIMIT $1[0m  [["LIMIT", 11]]
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (106.6ms)[0m  [1m[35mDROP DATABASE IF EXISTS "transportation_development"[0m
+  [1m[35m (103.2ms)[0m  [1m[35mDROP DATABASE IF EXISTS "transportation_test"[0m
+  [1m[35m (260.5ms)[0m  [1m[35mCREATE DATABASE "transportation_development" ENCODING = 'unicode'[0m
+  [1m[35m (241.1ms)[0m  [1m[35mCREATE DATABASE "transportation_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "routes" CASCADE[0m
+  [1m[35m (9.2ms)[0m  [1m[35mCREATE TABLE "routes" ("id" bigserial primary key, "carrier" character varying, "destination" character varying, "origin" character varying)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "stops" CASCADE[0m
+  [1m[35m (7.6ms)[0m  [1m[35mCREATE TABLE "stops" ("id" bigserial primary key, "address" character varying, "route_id" integer)[0m
+  [1m[35m (8.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (3.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20180109185629)[0m
+  [1m[35m (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20180109185413);
+
+[0m
+  [1m[35m (4.5ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2018-01-09 19:32:07.923257"], ["updated_at", "2018-01-09 19:32:07.923257"]]
+  [1m[35m (0.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "routes" CASCADE[0m
+  [1m[35m (6.5ms)[0m  [1m[35mCREATE TABLE "routes" ("id" bigserial primary key, "carrier" character varying, "destination" character varying, "origin" character varying)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "stops" CASCADE[0m
+  [1m[35m (4.5ms)[0m  [1m[35mCREATE TABLE "stops" ("id" bigserial primary key, "address" character varying, "route_id" integer)[0m
+  [1m[35m (7.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20180109185629)[0m
+  [1m[35m (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20180109185413);
+
+[0m
+  [1m[35m (4.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2018-01-09 19:32:07.963676"], ["updated_at", "2018-01-09 19:32:07.963676"]]
+  [1m[35m (0.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "matt"], ["destination", "atlanta"], ["origin", "orlando"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "tampa"], ["route_id", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "st pete"], ["route_id", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "clearwater"], ["route_id", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "tallahassee"], ["route_id", 1]]
+  [1m[35m (2.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 1]]
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (103.5ms)[0m  [1m[35mDROP DATABASE IF EXISTS "transportation_development"[0m
+  [1m[35m (103.6ms)[0m  [1m[35mDROP DATABASE IF EXISTS "transportation_test"[0m
+  [1m[35m (237.9ms)[0m  [1m[35mCREATE DATABASE "transportation_development" ENCODING = 'unicode'[0m
+  [1m[35m (225.2ms)[0m  [1m[35mCREATE DATABASE "transportation_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "routes" CASCADE[0m
+  [1m[35m (9.2ms)[0m  [1m[35mCREATE TABLE "routes" ("id" bigserial primary key, "carrier" character varying, "destination" character varying, "origin" character varying)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "stops" CASCADE[0m
+  [1m[35m (5.0ms)[0m  [1m[35mCREATE TABLE "stops" ("id" bigserial primary key, "address" character varying, "route_id" integer)[0m
+  [1m[35m (4.6ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20180109185629)[0m
+  [1m[35m (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20180109185413);
+
+[0m
+  [1m[35m (4.7ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2018-01-09 19:34:59.348113"], ["updated_at", "2018-01-09 19:34:59.348113"]]
+  [1m[35m (1.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "routes" CASCADE[0m
+  [1m[35m (6.0ms)[0m  [1m[35mCREATE TABLE "routes" ("id" bigserial primary key, "carrier" character varying, "destination" character varying, "origin" character varying)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "stops" CASCADE[0m
+  [1m[35m (4.8ms)[0m  [1m[35mCREATE TABLE "stops" ("id" bigserial primary key, "address" character varying, "route_id" integer)[0m
+  [1m[35m (4.4ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20180109185629)[0m
+  [1m[35m (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20180109185413);
+
+[0m
+  [1m[35m (4.4ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2018-01-09 19:34:59.383942"], ["updated_at", "2018-01-09 19:34:59.383942"]]
+  [1m[35m (0.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "matt's big rigs"], ["destination", "miami"], ["origin", "atlanta"]]
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "athens"], ["route_id", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "tallahassee"], ["route_id", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "orlando"], ["route_id", 1]]
+  [1m[35m (2.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 1]]
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "f"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 2]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "d"], ["route_id", 2]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "e"], ["route_id", 2]]
+  [1m[35m (2.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 2]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "e"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 3]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "d"], ["route_id", 3]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 3]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "h"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 4]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "d"], ["route_id", 4]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "e"], ["route_id", 4]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "f"], ["route_id", 4]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "g"], ["route_id", 4]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 4]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "d"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 5]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 5]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "f"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 6]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "d"], ["route_id", 6]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "e"], ["route_id", 6]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 6]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "d"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 7]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 7]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "d"], ["origin", "b"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "c"], ["route_id", 8]]
+  [1m[35m (2.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 8]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "d"], ["destination", "d"], ["origin", "d"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "d"], ["route_id", 9]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 9]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "s"], ["destination", "s"], ["origin", "s"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "s"], ["route_id", 10]]
+  [1m[35m (0.9ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 10]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "2"], ["destination", "5"], ["origin", "3"]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "4"], ["route_id", 11]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 11]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "m"], ["destination", "m"], ["origin", "m"]]
+  [1m[35m (2.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 12]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "d"], ["destination", "d"], ["origin", "d"]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 13]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "d"], ["destination", ""], ["origin", ""]]
+  [1m[35m (0.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 14]]
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", ""], ["destination", ""], ["origin", ""]]
+  [1m[35m (0.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 15]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "d"], ["destination", "s"], ["origin", "f"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "g"], ["route_id", 16]]
+  [1m[35m (0.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 16]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "d"], ["origin", "b"]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "d"], ["route_id", 17]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "d"], ["route_id", 17]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "d"], ["route_id", 17]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 17]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "a"], ["origin", "a"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 18]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 18]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "a"], ["origin", "a"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 19]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 19]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 19]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 19]]
+  [1m[35m (0.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 19]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "matt"], ["destination", "tampa"], ["origin", "orlando"]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 20]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "a"], ["origin", "a"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 21]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 21]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 21]]
+  [1m[35m (2.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 21]]
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "a"], ["origin", "a"]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 22]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "a"], ["origin", "a"]]
+  [1m[35m (2.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.2ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 23]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "a"], ["origin", "a"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 24]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 24]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "routes" ("carrier", "destination", "origin") VALUES ($1, $2, $3) RETURNING "id"[0m  [["carrier", "a"], ["destination", "a"], ["origin", "a"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 25]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 25]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stops" ("address", "route_id") VALUES ($1, $2) RETURNING "id"[0m  [["address", "a"], ["route_id", 25]]
+  [1m[35m (2.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mStop Load (0.1ms)[0m  [1m[34mSELECT "stops".* FROM "stops" WHERE "stops"."route_id" = $1[0m  [["route_id", 25]]
