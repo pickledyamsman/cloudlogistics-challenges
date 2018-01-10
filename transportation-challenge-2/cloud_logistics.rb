@@ -21,7 +21,7 @@ class CloudLogistics
 
   def ask_stop_number
     puts 'Number of stops:'
-    puts 'Stops must be 0 or higher.' while (stop_number = gets.chomp.to_i) < 2
+    puts 'Stops must be 2 or higher.' while (stop_number = gets.chomp.to_i) < 2
     stop_number
   end
 

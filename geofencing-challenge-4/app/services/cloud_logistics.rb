@@ -1,21 +1,31 @@
-require_relative 'config/environment'
-
 # This file is used to start the CLI from the command line.
 class CloudLogistics
+  DISTANCE = 10
+
   def call
-    run_cli
-    show_bill
+    created_route = build_route
+    created_route.stops.each do |stop|
+      while stop.visited == false
+        current = ask_current
+
+        if find_distance(stop, current) < DISTANCE
+          stop.update_attribute(:visited, true)
+          show_visited_stop(current)
+        end
+      end
+    end
   end
 
   private
 
-  def run_cli
+  def build_route
     @route = Route.new
     stop_number = ask_stop_number
     puts 'Carrier name:'
     @route.carrier = gets.chomp
     ask_stops(stop_number - 2, @route)
     @route.save
+    @route
   end
 
   #######################
@@ -36,7 +46,6 @@ class CloudLogistics
       route.stops << split_address(gets.chomp, "#{(stop + 1).ordinalize} stop")
     end
     puts 'Destination:'
-    puts 'Format (street address, city, state, zipcode, country)'
     route.stops << split_address(gets.chomp, 'Destination')
   end
 
@@ -50,6 +59,11 @@ class CloudLogistics
                 zipcode: zipcode,
                 country: country,
                 stop_type: stop_type)
+  end
+
+  def ask_current
+    puts 'Current location:'
+    split_address(gets.chomp, 'current')
   end
 
   #######################
@@ -69,11 +83,36 @@ class CloudLogistics
     end
   end
 
+  def show_visited_stop(current)
+    show_bill
+    puts "Location, #{current.address}, #{current.city}, #{current.state}"\
+         " #{current.zipcode} is within #{DISTANCE} miles, marking the "\
+         "destination as visited!"
+  end
+
+  #######################
+  # Output formatter methods
+  #######################
+
   def stop_formatter(stop)
-    puts " - #{stop.stop_type}: #{stop.address}, "\
-     "#{stop.city}, #{stop.state} #{stop.zipcode}, "\
-     "#{stop.country} #{stop.latitude}, #{stop.longitude}"
+    puts " - #{visited_formatter(stop)}#{stop.stop_type}: #{stop.address}, "\
+         "#{stop.city}, #{stop.state} #{stop.zipcode}, "\
+         "#{country_formatter(stop)}#{stop.latitude}, #{stop.longitude}"
+  end
+
+  def country_formatter(stop)
+    "#{stop.country} " if stop.country.present?
+  end
+
+  def visited_formatter(stop)
+    '* ' if stop.visited == true
+  end
+
+  #######################
+  # geolocation methods
+  #######################
+
+  def find_distance(destination, current)
+    destination.distance_from(current)
   end
 end
-
-CloudLogistics.new.call

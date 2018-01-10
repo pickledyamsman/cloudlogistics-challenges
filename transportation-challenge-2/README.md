@@ -2,6 +2,8 @@
 
 To start the program, run `ruby cloud_logistics.rb` in the terminal.
 
+# Requirements
+
 ## Transportation 
 
 The purpose of this challenge is to model, in a very simple way, the transportation domain. The goal is to model a multi-stop "load" or "delivery", moving from point A to point Z. Please use ActiveRecord/Rails or something equivalent as the next two challenges build on this.
