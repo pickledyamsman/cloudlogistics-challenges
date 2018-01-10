@@ -14,14 +14,14 @@ class CloudLogistics
     @stops = ask_stop_number
     @route.carrier = ask_question('Carrier name:')
     @route.origin = ask_question('Origin:')
-    ask_stops(@stops, @route)
+    ask_stops(@stops - 2, @route)
     @route.destination = ask_question('Destination:')
     @route.save
   end
 
   def ask_stop_number
     puts 'Number of stops:'
-    puts 'Stops must be 0 or higher.' while (stop_number = gets.chomp.to_i) < 0
+    puts 'Stops must be 0 or higher.' while (stop_number = gets.chomp.to_i) < 2
     stop_number
   end
 
