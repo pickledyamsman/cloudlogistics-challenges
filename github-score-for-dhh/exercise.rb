@@ -24,7 +24,7 @@ class ScoreCalculator
 
   def call
     score_calculator
-    "DHH's github score is #{@score}"
+    "DHH's github score is #{score}"
   end
 
   private
