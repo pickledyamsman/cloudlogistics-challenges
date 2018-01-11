@@ -3,30 +3,19 @@ class CloudLogistics
   DISTANCE = 10
 
   def call
-    created_route = build_route
-    created_route.stops.each do |stop|
-      while stop.visited == false
-        current = ask_current
-
-        if find_distance(stop, current) < DISTANCE
-          stop.update_attribute(:visited, true)
-          show_visited_stop(current)
-        end
-      end
-    end
-  end
-
-  private
-
-  def build_route
     @route = Route.new
     stop_number = ask_stop_number
     puts 'Carrier name:'
     @route.carrier = gets.chomp
     ask_stops(stop_number - 2, @route)
     @route.save
-    @route
+
+    @route.stops.each do |stop|
+      check_current_distance(stop)
+    end
   end
+
+  private
 
   #######################
   # Input methods
@@ -114,5 +103,16 @@ class CloudLogistics
 
   def find_distance(destination, current)
     destination.distance_from(current)
+  end
+
+  def check_current_distance(stop)
+    while stop.visited == false
+      current = ask_current
+
+      if find_distance(stop, current) < DISTANCE
+        stop.update_attribute(:visited, true)
+        show_visited_stop(current)
+      end
+    end
   end
 end

@@ -1,13 +1,6 @@
 # This file is used to start the CLI from the command line.
 class CloudLogistics
   def call
-    run_cli
-    show_output
-  end
-
-  private
-
-  def run_cli
     @route = Route.new
     @stops = ask_stop_number
     @route.carrier = ask_question('Carrier name:')
@@ -15,7 +8,11 @@ class CloudLogistics
     ask_stops(@stops - 2, @route)
     @route.destination = ask_question('Destination:')
     @route.save
+
+    show_output
   end
+
+  private
 
   def ask_stop_number
     puts 'Number of stops:'
